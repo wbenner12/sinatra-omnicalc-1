@@ -43,10 +43,12 @@ get ("/payment/results") do
   @the_n = params.fetch("users_years").to_f * 12
   @the_pv = params.fetch("users_principal").to_f
 
-  @numerator = (@the_r * 0.01 / 12) * @the_pv
-  @denominator = 1 - ((1 + @the_r) ** (@the_n * -1))
+  @numerator = (@the_r / 100 / 12) * @the_pv
+  @denominator1 = 1 + (@the_r / 100 / 12)
+  @denominator2 = @denominator1 ** -@the_n
+  @denominator3 = 1 - @denominator2
 
-  @the_result = @numerator / @denominator
+  @the_result = @numerator / @denominator3
 
   erb(:payment_results)
 end
